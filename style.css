@@ -1,0 +1,135 @@
+
+body{
+  background-color: #f5f5f5;
+}
+.sec{
+  max-width: 90%;
+  margin: 7%;
+  margin-left: 13%;
+  font-family: "DFKai-SB";
+  font-size: 14px;
+  line-height: 19px;
+  z-index: 2;
+}
+#previous, #next{
+  margin-bottom: 10%;
+  border: 0;
+  background-color: #141414;
+  color: white;
+  width: 20%;
+  height:50px;
+  font-size: 20px;
+  font-family:"serif";
+  transition: all 0.5s;
+}
+#previous.active , #next.active{
+  margin-bottom: 10%;
+  border: 0;
+  background-color: #cecece;
+  color: black;
+  width: 20%;
+  height:50px;
+  font-size: 22px;
+  font-family:"serif";
+  transition: all 0.5s;
+}
+#previous{
+  margin-left: 25%;
+}
+#next{
+  margin-left: 9%;
+}
+#pageeee{
+  margin-left: 8%;
+  font-size: 25px;
+  font-family:"serif";
+}
+
+/*/////////////////
+.menuout{
+  position: fixed;
+}*/
+.asideMenu{
+  margin-left: -50%;
+  margin-top: -6.9%;
+  position: fixed;
+  width:  50%;
+  height: 100vh;
+  background-color: #cecece;/*rgb(202, 166, 75)*/
+  /*border-right: 3px solid orange;*/
+  transform: translateX(0);
+  transition: all 0.5s;
+  z-index: 1;
+}
+.title{
+  margin-top: 3%;
+  font-size: 100px;
+  font-family: 'Brush Script MT', cursive;
+}
+.asideMenu.active{
+  padding-left: 3%;
+  margin-right: 0;
+  position: fixed;
+  width: 50%;
+  height: 100vh;
+  background-color: #cecece;
+  
+  transition: all 0.5s;
+  transform: translateX(93%);
+  
+}
+.btn{
+  position: fixed;
+  margin-top: 0%;
+  margin-left: 100%;
+  width: 15%;
+  background-color: #272727; 
+  transition: all 0.5s;
+  height: 100vh;
+  z-index: 1;
+  border: 0;
+}
+.btn.active{
+  position: fixed;
+  margin-top: 0%;
+  margin-left: 73%;
+  width: 30%;
+  background-color: #272727; 
+  transition: all 0.5s;
+  height: 100vh;
+  z-index: 1;
+  border: 0;
+  transition: all 0.5s;
+  transform: translateX(50%);
+}
+.list{
+  display: flex;    
+}
+.optionList , .optionTitle{
+  display: block;
+  padding: 20px;
+  line-height: 2;
+}
+li{
+  font-family: "serif";
+  font-size: 40px;
+}
+.col{
+  font-size:25px;
+}
+.sele{
+  height:30px;
+  font-size:12px;
+}
+#input1{
+  max-width: 75%;
+  height:30px;
+}
+#sentpage{
+  height:30px;
+}
+h1{
+  margin-bottom: 15%;
+  margin-left: 15%;
+  font-size: 20px;
+}
