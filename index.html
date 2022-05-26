@@ -8,6 +8,7 @@
 
   <link href="https://fonts.googleapis.com/css?family=Faster+One" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="fainsh.png">
 </head>
 
 <body>
@@ -159,10 +160,29 @@
       }*/
     }
     populate(1);
-    window.addEventListener("load" , function(){
-      for(let i = 1;i<1450;i++){
-        pagechangeid.innerHTML+=`<option value="${i}">${i}</option>`;
+
+    async function titles() {
+      const requestURL = `https://gororo533.github.io/data/titles.json`;
+      const request = new Request(requestURL);
+      const response = await fetch(request);
+      const superHeroes = await response.json();
+      titletoselect(superHeroes);
+    }
+    function titletoselect(a){
+      for(let i = 0 , h = 1;i<1447;i++){
+        if(i === 135)h++;
+        if(i === 579)h++;
+        if(i === 888)h++;
+        if(i === 976)h++;
+        if(i === 1304 || i === 1394 ){
+          h--;
+          continue;
+        }
+        pagechangeid.innerHTML+=`<option value="${i+h}">${a[i]}</option>`;
       }
+    }
+    window.addEventListener("load" , function(){
+      titles(); 
     })
   </script>
 </body>
