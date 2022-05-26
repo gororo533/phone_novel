@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
 
-    <title>Our superheroes</title>
+<head>
+  <meta charset="utf-8">
 
-    <link href="https://fonts.googleapis.com/css?family=Faster+One" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-  </head>
+  <title>Novel</title>
 
-  <body>
-    <div class="menuout">
+  <link href="https://fonts.googleapis.com/css?family=Faster+One" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="menuout">
     <div class="asideMenu" id="asideMenu">
       <button class="btn" id="hi"></button>
       <div class="title">Aside Menu</div>
@@ -18,8 +19,8 @@
         <ul class="optionTitle">
           <li>Font size</li>
           <div class="col">
-            字型大小： 
-            <select class ="sele" onchange="fzchange(this.options[this.selectedIndex].value);">
+            字型大小：
+            <select class="sele" onchange="fzchange(this.options[this.selectedIndex].value);">
               <option value="8">8</option>
               <option value="10">10</option>
               <option value="12">12</option>
@@ -32,86 +33,87 @@
           <div class="col">
             <input id="input1">
             <button id="sentpage">sent</button>
+            <select class="sele" id="pagechangeid" onchange="pagechange(this.options[this.selectedIndex].value);">
+              
+            </select>
           </div>
-          <li>Font size</li>
+          <li>Font family</li>
           <div class="col">
-            字體： 
-            <select class ="sele" onchange="fmchange(this.options[this.selectedIndex].value);">
+            字體：
+            <select class="sele" onchange="fmchange(this.options[this.selectedIndex].value);">
               <option value="DFKai-SB">標楷體</option>
               <option value="PMingLiU">新細明體</option>
               <option value="Microsoft JhengHei">微軟正黑體</option>
             </select>
           </div>
-          
-          
         </ul>
-        
       </div>
     </div>
-    </div>
-      <section class="sec" id="sec">
+  </div>
+  <section class="sec" id="sec">
 
-      </section>
-      <button id="previous">Previous </button>
-      <span id="pageeee"></span>
-      <button id="next">Next</button>
-    <script>
+  </section>
+  <button id="previous">Previous </button>
+  <span id="pageeee"></span>
+  <button id="next">Next</button>
+
+  <script>
+    let pagechangeid = document.getElementById("pagechangeid");
     
     let btn = document.getElementById("hi");
-    /*btn.click(function(){
-      console.log("click");
-      document.getElementById("asideMenu").toggleClass("active");
-    })*/
-    btn.addEventListener("click" , function(){
+    btn.addEventListener("click", function () {
       document.getElementById("asideMenu").classList.toggle("active");
       btn.classList.toggle("active");
     })
 
     let page = 1;
-    
+    let fontsize = 14;
+    let fontfamily = "DFKai-SB";
     let next = document.getElementById("next");
-    next.addEventListener("click" , function(){
-      page+=1;
-      console.log(page)
+    next.addEventListener("click", function () {
+      page += 1;
       populate(page);
     })
-    
+
     let previous = document.getElementById("previous");
-    previous.addEventListener("click" , function(){
-      if(page!==0){
-        page-=1;
+    previous.addEventListener("click", function () {
+      if (page !== 0) {
+        page -= 1;
         populate(page);
       }
-      else{
-        alert("you can't do it ")
-      }
+      else alert("you can't do it ");
     })
 
-    function fzchange(x){
-      let chagefz=document.querySelectorAll("p");
-      
-      for(i of chagefz){
-        i.style=`font-size:${x}px; `;
+    function fzchange(x) {
+      let chagefz = document.querySelectorAll("p");
+      for (i of chagefz) {
+        i.style.fontSize = `${x}px`;
+        i.style.lineHeight = `${Number(x) * 2}px`;
       }
-      console.log(chagefz);
-      let h1 = document.querySelector("h1");
-      h1.style=`font-size:${Number(x)*2.5}px; `;
+      fontsize = Number(x);
     }
-    function fmchange(x){
-      let chagefz=document.querySelectorAll("p");
-      
-      for(i of chagefz){
-        i.style=`font-family:${x}; `;
+    function fmchange(x) {
+      let chagefz = document.querySelectorAll("p");
+      for (i of chagefz) {
+        i.style.fontFamily  =  `${x}`;
       }
-      console.log(chagefz);
       let h1 = document.querySelector("h1");
-      h1.style=`font-family:${x}; `;
+      h1.style.fontFamily  = `${x}`;
+      fontfamily = x;
     }
+    
+    function pagechange(x){
+      page = Number(x);
+      document.getElementById("asideMenu").classList.toggle("active");
+      btn.classList.toggle("active");
+      populate(page);
+    }
+
     let sentpage = document.getElementById("sentpage");
-    sentpage.addEventListener("click",function(){
+    sentpage.addEventListener("click", function () {
       let input1 = document.getElementById("input1");
-      if(!isNaN(input1.value)){
-        page = parseInt(input1.value , 10);
+      if (!isNaN(input1.value)) {
+        page = parseInt(input1.value, 10);
         document.getElementById("asideMenu").classList.toggle("active");
         btn.classList.toggle("active");
         populate(page);
@@ -127,13 +129,9 @@
       let b = `https://gororo533.github.io/data/${a}.json`
       const requestURL = b;
       const request = new Request(requestURL);
-
       const response = await fetch(request);
       const superHeroes = await response.json();
-
-
       populateHeroes(superHeroes);
-
     }
 
 
@@ -144,24 +142,29 @@
         console.log(i)
       }*/
       section.innerHTML = `<h1>${obj[0]}</h1>`;
-      for(let x = 1;x<obj.length;x++){
-        console.log(typeof(obj[x]));
-        
-        i = obj[x]        
-        const myPara = document.createElement('p');      
+      for (let x = 1; x < obj.length; x++) {
+
+        i = obj[x]
+        const myPara = document.createElement('p');
         myPara.innerHTML = `${i}`
         section.appendChild(myPara);
-          
-        
       }
       document.getElementById("pageeee").innerHTML = `P.${page}`;
-      window.scrollTo(0,0);
-
-      document.getElementById("pageeee").click();
-    
+      window.scrollTo(0, 0);
+      fmchange(fontfamily);
+      fzchange(`${fontsize}`);
+      console.log(fontfamily ,fontsize);
+      /*for(let i = 1;i<1450;i++){
+        pagechangeid.innerHTML+=`<option value="${i}">${i}</option>`;
+      }*/
     }
     populate(1);
+    window.addEventListener("load" , function(){
+      for(let i = 1;i<1450;i++){
+        pagechangeid.innerHTML+=`<option value="${i}">${i}</option>`;
+      }
+    })
+  </script>
+</body>
 
-    </script>
-  </body>
 </html>

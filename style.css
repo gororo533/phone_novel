@@ -16,31 +16,21 @@ body{
   border: 0;
   background-color: #141414;
   color: white;
-  width: 20%;
-  height:50px;
-  font-size: 20px;
+  width: 30%;
+  height: 7vh;
+  font-size: 50px;
   font-family:"serif";
   transition: all 0.5s;
 }
-#previous.active , #next.active{
-  margin-bottom: 10%;
-  border: 0;
-  background-color: #cecece;
-  color: black;
-  width: 20%;
-  height:50px;
-  font-size: 22px;
-  font-family:"serif";
-  transition: all 0.5s;
-}
+
 #previous{
-  margin-left: 25%;
+  margin-left: 15%;
 }
 #next{
-  margin-left: 9%;
+  margin-left: 5%;
 }
 #pageeee{
-  margin-left: 8%;
+  margin-left: 4%;
   font-size: 25px;
   font-family:"serif";
 }
@@ -50,8 +40,8 @@ body{
   position: fixed;
 }*/
 .asideMenu{
-  margin-left: -50%;
-  margin-top: -6.9%;
+  margin-left: -51%;
+  margin-top: -7%;
   position: fixed;
   width:  50%;
   height: 100vh;
@@ -115,21 +105,23 @@ li{
   font-size: 40px;
 }
 .col{
-  font-size:25px;
+  font-size:30px;
 }
 .sele{
-  height:30px;
+  height:40px;
   font-size:12px;
 }
 #input1{
   max-width: 75%;
-  height:30px;
+  height:40px;
 }
 #sentpage{
-  height:30px;
+  height:40px;
 }
 h1{
-  margin-bottom: 15%;
+  padding-top:10%;
+  margin-bottom: 20%;
   margin-left: 15%;
-  font-size: 20px;
+  font-size:80px;
+  line-height:90px;
 }
