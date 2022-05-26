@@ -125,3 +125,6 @@ h1{
   font-size:80px;
   line-height:90px;
 }
+p{
+  margin: 3vh;
+}
