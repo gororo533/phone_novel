@@ -7,15 +7,23 @@
   <title>Novel</title>
 
   <link href="https://fonts.googleapis.com/css?family=Faster+One" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-auth.js"></script>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="fainsh.png">
+
 </head>
 
 <body>
+  <div class="loading" id="loading">
+    <div class="progress" id="progress">0%</div>
+    <!--<div class="progress_ghaph" id="progress_ghaph"></div>-->
+  </div>
   <div class="menuout">
     <div class="asideMenu" id="asideMenu">
       <button class="btn" id="hi"></button>
-      <div class="title">Aside Menu</div>
+      <div class="title" id="menu">Menu</div>
       <div class="list">
         <ul class="optionTitle">
           <li>Font size</li>
@@ -35,7 +43,7 @@
             <input id="input1">
             <button id="sentpage">sent</button>
             <select class="sele" id="pagechangeid" onchange="pagechange(this.options[this.selectedIndex].value);">
-              
+
             </select>
           </div>
           <li>Font family</li>
@@ -46,6 +54,10 @@
               <option value="PMingLiU">新細明體</option>
               <option value="Microsoft JhengHei">微軟正黑體</option>
             </select>
+          </div>
+          <li>User</li>
+          <div id="userpage" class="userpage">
+
           </div>
         </ul>
       </div>
@@ -59,8 +71,53 @@
   <button id="next">Next</button>
 
   <script>
+
+    let config = {
+      apiKey: "AIzaSyBVbF01br_AHM-GNRKhZQ6eUIXRfjkAqhQ",
+      authDomain: "phonenovel-9a867.firebaseapp.com",
+      projectId: "phonenovel-9a867",
+      storageBucket: "phonenovel-9a867.appspot.com",
+      messagingSenderId: "933716430178",
+      appId: "1:933716430178:web:2dd5d2a6109029c0a9b03b",
+      measurementId: "G-QPBPLN53PQ"
+    };
+    firebase.initializeApp(config);
+    //firebase.firestore().settings( { timestampsInSnapshots: true });
+    let db = firebase.firestore();
+    //var database = firebase.database();
+    let loading = document.getElementById("loading")
+    let progress = document.getElementById("progress")
+    let progress_ghaph = document.getElementById("progress_ghaph")
+    let prg = 0
+    let timer = 0
+
+    function makeitdisappear() {
+      loading.style.display = "none";
+      document.querySelector("body").style.overflowY = "scroll";
+    }
+    function progressing(dist, delay, callback) {
+      window.clearInterval(timer)
+      document.querySelector("body").style.overflow = "hidden";
+      timer = window.setInterval(() => {
+        if (prg >= dist) {
+          window.clearInterval(timer)
+          prg = dist
+          //callback && callback()
+          makeitdisappear()
+          return
+        } else {
+          prg++;
+        }
+        //progress_ghaph.innerHTML+=`█`;
+        progress.innerHTML = `${prg}%`;
+        //console.log(prg)
+      }, delay)
+    }
+
+    window.onload = function () {
+      progressing(100, 50)
+    }
     let pagechangeid = document.getElementById("pagechangeid");
-    
     let btn = document.getElementById("hi");
     btn.addEventListener("click", function () {
       document.getElementById("asideMenu").classList.toggle("active");
@@ -96,14 +153,16 @@
     function fmchange(x) {
       let chagefz = document.querySelectorAll("p");
       for (i of chagefz) {
-        i.style.fontFamily  =  `${x}`;
+        i.style.fontFamily = `${x}`;
       }
-      let h1 = document.querySelector("h1");
-      h1.style.fontFamily  = `${x}`;
+      let h1 = document.querySelectorAll("h1");
+      for (i of h1) {
+        i.style.fontFamily = `${x}`;
+      }
       fontfamily = x;
     }
-    
-    function pagechange(x){
+
+    function pagechange(x) {
       page = Number(x);
       document.getElementById("asideMenu").classList.toggle("active");
       btn.classList.toggle("active");
@@ -126,7 +185,7 @@
     })
 
     async function populate(a) {
-      console.log(a);
+
       let b = `https://gororo533.github.io/data/${a}.json`
       const requestURL = b;
       const request = new Request(requestURL);
@@ -135,14 +194,26 @@
       populateHeroes(superHeroes);
     }
 
-
     function populateHeroes(obj) {
       const section = document.querySelector('section');
+      let outerofh1 = document.createElement("div");
+      outerofh1.setAttribute("class", "outerofh1");
+      outerofh1.setAttribute("id", "outerofh1");
 
-      /*for (i of obj) {
-        console.log(i)
-      }*/
-      section.innerHTML = `<h1>${obj[0]}</h1>`;
+      section.innerHTML = "";
+      let pretitle = obj[0].split("章");
+      if (pretitle.length == 2) pretitle[0] += '章';
+
+      for (let x = 0; x < pretitle.length; x++) {
+        const myPara = document.createElement('h1');
+        let index = pretitle[x].indexOf("（");
+        if (index !== -1) finaltitle = pretitle[x].substring(0, index);
+        else finaltitle = pretitle[x]
+        myPara.innerHTML = `${finaltitle}`
+        outerofh1.appendChild(myPara);
+      }
+
+      section.appendChild(outerofh1);
       for (let x = 1; x < obj.length; x++) {
 
         i = obj[x]
@@ -154,13 +225,18 @@
       window.scrollTo(0, 0);
       fmchange(fontfamily);
       fzchange(`${fontsize}`);
-      console.log(fontfamily ,fontsize);
+      let user = firebase.auth().currentUser;
+      if(user!==null){
+        db.collection(`${user.email}`).doc('last').set({              
+          page: page
+        })
+        .then(() => console.log('Document successfully NEW!')) //成功的結果
+        .catch(error => console.error('Error writing document: ', error)) //失敗的結果
+      }
       /*for(let i = 1;i<1450;i++){
         pagechangeid.innerHTML+=`<option value="${i}">${i}</option>`;
       }*/
     }
-    populate(1);
-
     async function titles() {
       const requestURL = `https://gororo533.github.io/data/titles.json`;
       const request = new Request(requestURL);
@@ -168,22 +244,96 @@
       const superHeroes = await response.json();
       titletoselect(superHeroes);
     }
-    function titletoselect(a){
-      for(let i = 0 , h = 1;i<1447;i++){
-        if(i === 135)h++;
-        if(i === 579)h++;
-        if(i === 888)h++;
-        if(i === 976)h++;
-        if(i === 1304 || i === 1394 ){
+    function titletoselect(a) {
+      for (let i = 0, h = 1; i < 1447; i++) {
+        if (i === 135) h++;
+        if (i === 579) h++;
+        if (i === 888) h++;
+        if (i === 976) h++;
+        if (i === 1304 || i === 1394) {
           h--;
           continue;
         }
-        pagechangeid.innerHTML+=`<option value="${i+h}">${a[i]}</option>`;
+        pagechangeid.innerHTML += `<option value="${i + h}">${a[i]}</option>`;
       }
     }
-    window.addEventListener("load" , function(){
-      titles(); 
+    function prelogin() {
+      let logemail = document.getElementById("signmail").value;
+      let logpassward = document.getElementById("signward").value;
+      login(logemail, logpassward);
+    }
+    function login(email, passward) {
+      firebase.auth().signInWithEmailAndPassword(email, passward)
+        .then((userCredential) => {
+          // Signed in
+          console.log("log in sus");
+          var user = userCredential.user;
+          // ...
+        })
+        .catch((error) => {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.log(error);
+          alert(errorCode);
+        });
+    }
+
+    firebase.auth().onAuthStateChanged((user) => {
+      let userpage = document.getElementById("userpage");
+      if (user) {
+        db.collection(`${user.email}`).doc("last").get().then(doc => {
+          page = doc.data().page
+          populate(page);
+        })
+          .catch(error => {
+            console.log(error)
+          })
+        userpage.innerHTML = `
+        登出:
+        <button id="logoutbtn">log out</button>
+        `
+        document.getElementById("menu").innerHTML = `${user.displayName}'s Menu`
+        let logoutbtn = document.getElementById("logoutbtn");
+        logoutbtn.addEventListener("click", function(){
+          document.getElementById("asideMenu").classList.toggle("active");
+          logout();
+          console.log("logout");
+        }
+        );
+      } else {
+        populate(page);
+        userpage.innerHTML = `unsign in
+        <br>
+        <input id = "signmail" placeholder="email">
+        <br>
+        <input id="signward" placeholder = "passward">
+        <button id="sentsign">sign in</button>
+        <a href="register.html">Register</a>
+        `
+        document.getElementById("menu").innerHTML = `Menu`
+        let sentsign = document.getElementById("sentsign");
+        sentsign.addEventListener("click", function(){
+          document.getElementById("asideMenu").classList.toggle("active");
+          prelogin();
+        })
+        console.log("NONE")
+      }
     })
+
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        // Sign-out successful.
+        console.log("log out sus");
+      }).catch((error) => {
+        // An error happened.
+        console.log(error);
+      });
+    }
+
+    window.addEventListener("load", function () {
+      titles();
+    })
+
   </script>
 </body>
 

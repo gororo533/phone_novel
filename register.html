@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<head>
+
+  <style>
+    .content {
+      margin: 5%;
+    }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-auth.js"></script>
+  <title>Create account</title>
+</head>
+
+<body>
+  <div class="content">
+    <p>User name</p>
+    <input id="caname">
+    <p>User email</p>
+    <input id="caemail">
+    <p>User passward</p>
+    <input id="capassward" placeholder="not least than 6wards">
+    <button id="cacreate">create!</button>
+    <button id="retu">return!</button>
+    <script>
+      var config = {
+        apiKey: "AIzaSyBVbF01br_AHM-GNRKhZQ6eUIXRfjkAqhQ",
+        authDomain: "phonenovel-9a867.firebaseapp.com",
+        projectId: "phonenovel-9a867",
+        storageBucket: "phonenovel-9a867.appspot.com",
+        messagingSenderId: "933716430178",
+        appId: "1:933716430178:web:2dd5d2a6109029c0a9b03b",
+        measurementId: "G-QPBPLN53PQ"
+      };
+      firebase.initializeApp(config);
+      //firebase.firestore().settings( { timestampsInSnapshots: true });
+      var db = firebase.firestore();
+      //var database = firebase.database();
+
+      let cabtn = document.getElementById("cacreate");
+      let rebtn = document.getElementById("retu");
+
+      function createaccount() {
+        let caemail = document.getElementById("caemail").value;
+        let capassward = document.getElementById("capassward").value;
+        let caname = document.getElementById("caname").value;
+        firebase.auth().createUserWithEmailAndPassword(caemail, capassward)
+          .then(function (result) {
+            alert("done!");
+            return result.user.updateProfile({
+              displayName: caname
+            })
+          })
+          .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log('error=', errorMessage);
+            alert(errorMessage);
+          });
+      }
+
+      function updatelist() { 
+        let caemail = document.getElementById("caemail").value;
+        db.collection(`${caemail}`).doc('last').set({              
+          page: 1
+        })
+        .then(() => console.log('Document successfully written!')) //成功的結果
+        .catch(error => console.error('Error writing document: ', error)) //失敗的結果
+      }
+
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          let caemail = document.getElementById("caemail").value;
+          if (caemail !== "") updatelist();
+          document.getElementById("caemail").value = "";
+          document.getElementById("capassward").value = "";
+          document.getElementById("caname").value = "";
+          console.log("3", user);
+        }
+      });
+
+      function returntoindex() {
+        document.location.href = "index.html";
+      }
+
+      cabtn.addEventListener('click', createaccount);
+      rebtn.addEventListener('click', returntoindex);
+      document.getElementById("capassward").addEventListener('keypress', function (event) {
+        if (event.key === "Enter") {
+          //enter的鍵值為13
+          event.preventDefault();
+          cabtn.click(); //觸動按鈕的點擊
+        }
+      })
+
+
+      function logout() {
+        firebase.auth().signOut().then(() => {
+          // Sign-out successful.
+          console.log("log out sus");
+        }).catch((error) => {
+          // An error happened.
+          console.log(error);
+        });
+      }
+      window.addEventListener("load", logout);
+
+      /*
+      X nstmm13@gmail.com 20220503
+      x gororo533@gmail.com 2101024
+      a a@gmail.com 123123
+      
+      */
+    </script>
+</body>
+
+
+
+</html>
